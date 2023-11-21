@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Creator</title>
+    <style>
+      table,
+      tr,
+      td,
+      th {
+        border: 2px solid black;
+        border-collapse: collapse;
+        padding: 5px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea name="" id="blog" cols="30" rows="10"></textarea>
+    <button onclick="blogcreate()">Create</button>
+    
+    <button onclick="formatblog()">Format Blog</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Line</th>
+          <th>Tags</th>          
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tablebody"></tbody>
+    </table>
+    <br>
+    
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Link</th>
+          <th>Text</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody id="bloglinkbody">
+        
+        
+        
+      </tbody>      
+    </table>
+    <button onclick="bloglinkadd()">Add Link</button>
+
+    <div id="formatedblog"></div>
+    <button onclick="formatblog()">Format Blog</button>
+    <br>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Data</th>          
+          <th>Copy</th>          
+        </tr>
+      </thead>
+      <tbody id="qabody">
+        <tr>
+          <td>Questions</td>
+          <td id="questionstext"></td>
+          <td id="questionscopy"></td>
+        </tr>       
+        <tr>
+          <td>Answers</td>
+          <td id="answerstext"></td>
+          <td id="answerscopy"></td>
+        </tr>      
+      </tbody>
+    </table>
+    <script>
+      id = 0;
+      
+      function blogcreate() {
+        tablebody.innerHTML = "";
+        blogtext = blog.value;
+        start = 0;
+        end = blogtext.indexOf("\n");
+        id = 1;
+        i = 1;
+        do {
+          text = blogtext.slice(start, end);
+          start = end;
+          tablebody.innerHTML +=
+            `<tr>
+                  <td id="line` +id +`">` +text +`</td>
+                  <td colspan="2">
+                    h2:<input type="radio" name="tag` +id +`" value="h2"><br>
+                    h3:<input type="radio" name="tag` +id +`" value="h3"><br>
+                    h4:<input type="radio" name="tag` +id +`" value="h4"><br>
+                    p:<input type="radio" name="tag` +id +`" value="p"><br>
+                    ps:<input type="radio" name="tag` +id +`" value="ps"><br>
+                    Q:<input type="radio" name="tag` +id +`" value="Q"><br>
+                    A:<input type="radio" name="tag` +id +`" value="A">
+                  </td>
+                 
+                </tr>`;
+          end = blogtext.indexOf("\n", end + 1);
+          if (end == -1) i = 0;
+          else id++;
+        } while (i);
+      }
+      function formatblog() {
+        formatedblog.innerHTML = "";
+        questions="";
+        answers="";
+        strongtagcount=0;
+        for (i = 1; i <= id; i++) {
+          line = document.getElementById("line" + i);
+          line = line.innerText;
+          tag = document.getElementsByName("tag" + i);
+
+          len=bloglinkidarray.length;
+          
+          
+          for(j=0;j<len;j++){
+            linktext=document.getElementById("bloglink"+bloglinkidarray[j]+"text").value;
+            match=line.search(linktext);
+            if(-1!=match){
+              link=document.getElementById("bloglink"+bloglinkidarray[j]).value;
+              link=`<a href="`+link+`" style="text-decoration: none;">`+linktext+`</a>`;
+              console.log(link);
+              line=line.replace(linktext,link);
+            }
+          }          
+          if (tag[0].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              ` <h2 class="margin-para" id="">` + line + `</h2>`;
+          }
+          if (tag[1].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              ` <h3 class="margin-para" id="">` + line + `</h3>`;
+          }
+          if (tag[2].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              ` <h4 class="margin-para" id="">` + line + `</h4>`;
+          }
+          if (tag[3].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              ` <p align="justify" style="word-spacing: -1px;">` +
+              line +
+              `</p>`;
+          }
+          if (tag[4].checked) {
+            if(strongtagcount){
+              strongtagcount++;
+              formatedblog.innerHTML +=
+                ` <p align="justify" style="word-spacing: -1px;"><strong>`+strongtagcount+`. </strong>` +
+                line +
+                `</p>`;
+
+            }
+            else{
+              strongtagcount++;
+              formatedblog.innerHTML +=
+                ` <p align="justify" style="word-spacing: -1px;"><strong>1. </strong>` +
+                line +
+                `</p>`;
+            }
+          }
+          if (tag[5].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              `  <p align="justify" style="word-spacing: -1px;">
+                    <strong>Q. `+line+`</strong>
+                  </p>`;
+            questions+=" | "+line;
+          }
+          if (tag[6].checked) {
+            strongtagcount=0;
+            formatedblog.innerHTML +=
+              `<p align="justify" style="word-spacing: -1px;">
+                  <strong>A. </strong>`+line+`
+               </p>`;
+            answers+=" | "+line;
+          }
+        }
+        //htmlblog.innerText=formatedblog.innerHTML;
+        navigator.clipboard.writeText(formatedblog.innerHTML);
+        questionstext.innerText=questions;
+        questionscopy.innerHTML=datacopy(questions);
+        answerstext.innerText=answers;
+        answerscopy.innerHTML=datacopy(answers);
+
+        console.log(questions);
+        console.log(answers);
+      }
+      function datacopy(data) {
+        data = data.replaceAll("\n", "");
+        data ="<button onclick=\"navigator.clipboard.writeText(`"+data+"`)\">Copy</button>";
+        return data;
+      }
+
+      bloglinkid=0;
+      bloglinkidarray=[];
+      function bloglinkadd(){                
+        if(!bloglinkid){
+          bloglinkid++;
+          bloglinkbody.innerHTML+=`
+            <tr id=bloglinkrow`+bloglinkid+`>
+              <td>
+                <input type="text" name="" id="bloglink`+bloglinkid+`">
+              </td>
+              <td>
+                <input type="text" name="" id="bloglink`+bloglinkid+`text">
+              </td>
+              <td>
+                <button onclick="bloglinkdelete(this.value)" value="`+bloglinkid+`">Delete</button>
+              </td>
+            </tr>`;
+        }
+        else{
+          row=document.createElement("tr");
+          row.setAttribute("id","bloglinkrow"+(bloglinkid+1));
+          console.log(bloglinkid);
+          rowadd=document.getElementById("bloglinkrow"+(bloglinkid));
+          
+          console.log(rowadd.innerHTML);
+          bloglinkbody.appendChild(row);
+          bloglinkid++;
+          row=document.getElementById("bloglinkrow"+bloglinkid);
+          row.innerHTML=`
+             <td>
+                <input type="text" name="" id="bloglink`+bloglinkid+`">
+              </td>
+              <td>
+                <input type="text" name="" id="bloglink`+bloglinkid+`text">
+              </td>
+              <td>
+                <button onclick="bloglinkdelete(this.value)" value="`+bloglinkid+`">Delete</button>
+              </td>`;
+        }
+        bloglinkidarray.push(bloglinkid);                        
+      }
+      function bloglinkdelete(linkid){
+        linkid=Number(linkid);
+        bloglinkrow=document.getElementById("bloglinkrow"+linkid);
+        bloglinkrow.remove();
+        index=bloglinkidarray.indexOf(linkid);       
+        bloglinkidarray.splice(index,1);                
+      }
+    </script>
+  </body>
+</html>
