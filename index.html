@@ -14,16 +14,18 @@
       border-collapse: collapse;
       padding: 5px 10px;
     }
-    .tagsbox{
+
+    .tagsbox {
       display: flex;
       justify-content: space-evenly;
       flex-wrap: wrap;
     }
-    .tagsbox span{
+
+    .tagsbox span {
       display: inline-block;
       margin: 2px;
       border: 1px solid red;
-    
+
     }
   </style>
 </head>
@@ -35,7 +37,7 @@
   <button onclick="formatblog()">Format Blog</button>
   <table>
     <colgroup>
-      <col width="70%">      
+      <col width="70%">
     </colgroup>
     <thead>
       <tr>
@@ -45,7 +47,7 @@
       </tr>
     </thead>
     <tbody id="tablebody">
-    
+
     </tbody>
   </table>
   <br>
@@ -89,7 +91,7 @@
     </tbody>
   </table>
   <div id="htmlblog"></div>
-  
+
   <script>
     id = 0;
 
@@ -102,10 +104,12 @@
       i = 1;
       do {
         text = blogtext.slice(start, end);
-        start = end;        
-        rowstyle=id%2==0 ?'style="background-color:grey"':'style=""';
-        tablebody.innerHTML +=
-          `<tr id="textrow` + id + `" ${rowstyle}>
+        start = end+1;
+        console.log(text);
+        if (text.length) {
+          rowstyle = id % 2 == 0 ? 'style="background-color:grey"' : 'style=""';
+          tablebody.innerHTML +=
+            `<tr id="textrow` + id + `" ${rowstyle}>
                   <td id="line` + id + `" >` + text + `</td>
                   <td style="font-size:20px;" class="tagsbox">
                     <label><span>h2:<input type="radio" name="tag` + id + `" value="h2"></span></label>
@@ -121,18 +125,20 @@
                     li:<input type="radio" name="tag` + id + `" value="li"><br>
                   </td>                 
                 </tr>`;
-        end = blogtext.indexOf("\n", end + 1);
+        }
+
+        end = blogtext.indexOf("\n", start);
         if (end == -1) i = 0;
         else id++;
       } while (i);
-   
+
     }
     // tagselect(1);
     // function tagselect(id) {
     //   for(i=1;i<=id;i++){
     //     selectedrow=document.getElementById("textrow"+i);
     //     selectedrow.style="border:5px solid green;";
-       
+
 
     //   }
     // }
