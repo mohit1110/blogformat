@@ -309,12 +309,12 @@
             plaintext = line.slice(strongmark + 1, end);
             formatedblog.innerHTML +=
               ` <p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
-            introduction += `<p align="justify" style="word-spacing: -1px;"><strong>` + strongtagcount + `. ${strongtext}</strong>${plaintext}</p>`;
+            introduction += `<p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
           }
           else {
             formatedblog.innerHTML +=
               ` <p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. </b>${line}</p>`;
-            introduction += `<p align="justify" style="word-spacing: -1px;"><strong>${strongtagcount}. </strong>${line}</p>`;
+            introduction += `<p align="justify" style="word-spacing: -1px;"><b>${strongtagcount}. </b>${line}</p>`;
           }
 
         }
