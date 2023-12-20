@@ -321,7 +321,7 @@
                         line = line.slice(1, end);
                     }
                     strongtagcount++;
-                    search = line.search(":");
+                    search = line.search(": ");
                     console.log(search);
                     if (search != -1 || line[0] == "*") {
                         mark = ':';
@@ -357,6 +357,7 @@
                     if (qflag) questions += " | " + line;
                     else {
                         qflag++;
+                        line=line.replaceAll(`"`,` `);
                         questions = line;
                     }
 
@@ -375,6 +376,7 @@
                     if (aflag) answers += " | " + line;
                     else {
                         aflag++;
+                        line=line.replaceAll(`"`,` `);
                         answers = line;
                     }
 
