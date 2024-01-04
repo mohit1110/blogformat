@@ -73,6 +73,7 @@
     </table>
     <button onclick="bloglinkadd()">Add Link</button>
 
+    <div id="TableofContent"></div>
     <div id="formatedblog"></div>
     <button onclick="formatblog()">Format Blog</button>
     <br>
@@ -307,8 +308,8 @@
                     introduction += `<h2 class="margin-para" id="${headingid}">${line}</h2>`;
 
                     if(1){
-                        tcid++;
-                        formatedblog.innerHTML +=
+                     
+                        TableofContent.innerHTML +=
                             ` <a href="#` + headingid + `">
                     <li align="justify">
                     ` + line + `
@@ -333,8 +334,8 @@
                     introduction += `<h3 class="margin-para" id="${headingid}">${line}</h3>`;
                     
                     if(1){
-                        tcid++;
-                        formatedblog.innerHTML +=
+                   
+                        TableofContent.innerHTML +=
                             `<a href="#` + headingid + `">
                     <li align="justify">
                     ` + line + `
@@ -355,10 +356,9 @@
                         ` <h4 class="margin-para" id="${headingid++}">` + line + `</h4>`;
                     introduction += `<h4 class="margin-para" id="${headingid}">${line}</h4>`;
 
-                    if(1){
-                        tcid++;
+                    if(1){                     
                    
-                   formatedblog.innerHTML +=
+                        TableofContent.innerHTML +=
                                 `<a href="#` + headingid + `">
                         <li align="justify">
                         ` + line + `
