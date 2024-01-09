@@ -547,6 +547,8 @@
 
         function datacopy(data) {
             data = data.replaceAll("\n", "");
+            data = data.replaceAll('"', " ");
+            data = data.replaceAll('”', " ");
             data = "<button onclick=\"navigator.clipboard.writeText(`" + data + "`)\">Copy</button>";
             return data;
         }
