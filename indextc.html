@@ -279,7 +279,7 @@
                         match = line.search(linktext);
                         if (-1 != match) {
                             link = document.getElementById("bloglink" + bloglinkidarray[j]).value;
-                            link = `<b><a href="` + link + `" target="_blank" style="color:red" rel="noopener">` + linktext + `</a></b>`;
+                            link = `<a href="` + link + `" target="_blank" style="color:red" rel="noopener">` + linktext + `</a>`;
                             line = line.replace(linktext, link);
                         }
                     }
