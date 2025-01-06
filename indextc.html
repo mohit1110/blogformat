@@ -279,7 +279,7 @@
                         match = line.search(linktext);
                         if (-1 != match) {
                             link = document.getElementById("bloglink" + bloglinkidarray[j]).value;
-                            link = `<b><a href="` + link + `" style="text-decoration: none;">` + linktext + `</a></b>`;
+                            link = `<b><a href="` + link + `" target="_blank" style="color:red" rel="noopener">` + linktext + `</a></b>`;
                             line = line.replace(linktext, link);
                         }
                     }
@@ -356,7 +356,7 @@
                         ` <h4 class="margin-para" id="${headingid++}">` + line + `</h4>`;
                     introduction += `<h4 class="margin-para" id="${headingid}">${line}</h4>`;
 
-                    if(1){                     
+                    if(0){                     
                    
                         TableofContent.innerHTML +=
                                 `<a href="#` + headingid + `">
