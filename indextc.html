@@ -374,8 +374,8 @@
                 if (tagcode == "c" || tag[3].checked) {
                     strongtagcount = 0;
                     formatedblog.innerHTML +=
-                        ` <p align="justify" style="word-spacing: -1px;">` + line + `</p>`;
-                    introduction += `<p align="justify" style="word-spacing: -1px;">${line}</p>`;
+                        ` <p align="left" style="word-spacing: -1px;">` + line + `</p>`;
+                    introduction += `<p align="left" style="word-spacing: -1px;">${line}</p>`;
                 }
                 if (tagcode == "v" || tag[4].checked || line[0] == "#") {
                     if (line[0] == "#") {
@@ -384,7 +384,7 @@
                     }
                     strongtagcount++;
                     search = line.search(": ");
-                    console.log(search);
+                    
                     if (search != -1 || line[0] == "*") {
                         mark = ':';
                         start = 0;
@@ -396,12 +396,12 @@
                         strongtext = line.slice(start, strongmark + 2);
                         plaintext = line.slice(strongmark + 2, end);
                         formatedblog.innerHTML +=
-                            ` <p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
-                        introduction += `<p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
+                            ` <p align="left" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
+                        introduction += `<p align="left" style="word-spacing: -1px;"><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
                     } else {
                         formatedblog.innerHTML +=
-                            ` <p align="justify" style="word-spacing: -1px;"><b>` + strongtagcount + `. </b>${line}</p>`;
-                        introduction += `<p align="justify" style="word-spacing: -1px;"><b>${strongtagcount}. </b>${line}</p>`;
+                            ` <p align="left" style="word-spacing: -1px;"><b>` + strongtagcount + `. </b>${line}</p>`;
+                        introduction += `<p align="left" style="word-spacing: -1px;"><b>${strongtagcount}. </b>${line}</p>`;
                     }
 
                 }
@@ -412,10 +412,10 @@
                     }
                     strongtagcount = 0;
                     formatedblog.innerHTML +=
-                        `  <p align="justify" style="word-spacing: -1px;">
+                        `  <p align="left" style="word-spacing: -1px;">
                     <strong>Q. ` + line + `</strong>
                   </p>`;
-                    questionanswer += `<p align="justify" style="word-spacing: -1px;"><strong>Q. ${line}</strong></p>`;
+                    questionanswer += `<p align="left" style="word-spacing: -1px;"><strong>Q. ${line}</strong></p>`;
                     if (qflag) questions += " | " + line;
                     else {
                         qflag++;
@@ -431,10 +431,10 @@
                     }
                     strongtagcount = 0;
                     formatedblog.innerHTML +=
-                        `<p align="justify" style="word-spacing: -1px;">
+                        `<p align="left" style="word-spacing: -1px;">
                   <strong>A. </strong>` + line + `
                </p>`;
-                    questionanswer += `<p align="justify" style="word-spacing: -1px;"><strong>A. </strong>${line}</p>`;
+                    questionanswer += `<p align="left" style="word-spacing: -1px;"><strong>A. </strong>${line}</p>`;
                     if (aflag) answers += " | " + line;
                     else {
                         aflag++;
