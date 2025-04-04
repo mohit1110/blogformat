@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Creator</title>
+    <style>
+        table,
+        tr,
+        td,
+        th {
+            border: 2px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+        }
+
+        .tagsbox {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .tagsbox span {
+            display: inline-block;
+            margin: 2px;
+            border: 1px solid red;
+        }
+
+        #formatcode {
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea name="" id="blog" cols="70" rows="10"></textarea>
+    <button onclick="blogcreate()">Create</button>
+
+    <button onclick="formatblog()">Format Blog</button><br>
+    Keyslock:<input type="checkbox" id="keyslock" checked>
+
+    <table>
+        <colgroup>
+            <col width="65%">
+            <col width="20%">
+            <col width="10%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Line</th>
+                <th>Tags</th>
+                <th>OTags</th>
+            </tr>
+        </thead>
+        <tbody id="tablebody">
+
+        </tbody>
+    </table>
+    <br> FormatCode:
+    <input type="text" name="" id="formatcode"><br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Link</th>
+                <th>Text</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="bloglinkbody">
+        </tbody>
+    </table>
+    <button onclick="bloglinkadd()">Add Link</button>
+
+    <div id="TableofContent"></div>
+    <div id="formatedblog"></div>
+    <button onclick="formatblog()">Format Blog</button>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data</th>
+                <th>Copy</th>
+            </tr>
+        </thead>
+        <tbody id="qabody">
+            <tr>
+                <td>Answers</td>
+                <td id="answerstext"></td>
+                <td id="answerscopy"></td>
+            </tr>
+            <tr>
+                <td>Questions</td>
+                <td id="questionstext"></td>
+                <td id="questionscopy"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="htmlblog"></div>
+
+    <script>
+        id = 0;
+        rowid = 0;
+
+        function blogcreate() {
+            tablebody.innerHTML = "";
+            blogtext = blog.value;
+            start = 0;
+            end = blogtext.indexOf("\n");
+            id = 1;
+            i = 1;
+
+            do {
+                text = blogtext.slice(start, end);
+                start = end + 1;
+                textlength = text.length;
+
+                if (textlength > 2) {
+                    rowstyle = id % 2 == 0 ? 'style="background-color:grey"' : 'style=""';
+                    //ptagchecked = textlength > 200 ? 'checked="true"' : '';
+
+                    tablebody.innerHTML +=
+                        `<tr id="textrow` + id + `" ${rowstyle}>
+                  <td id="line` + id + `" contenteditable="true">` + text + `</td>
+                  <td style="font-size:20px;" class="tagsbox">
+                    <label><span>h2:<input type="radio" name="tag` + id + `" value="h2"></span></label>
+                    <label><span>h3:<input type="radio" name="tag` + id + `" value="h3"></span></label>
+                    <label><span>h4:<input type="radio" name="tag` + id + `" value="h4"></span></label>
+                    <label><span>p:<input type="radio" name="tag` + id + `" value="p"></span></label>
+                    <label><span>ps:<input type="radio" name="tag` + id + `" value="ps"></span></label>
+                    <label><span>Q:<input type="radio" name="tag` + id + `" value="Q"></span></label>
+                    <label><span>A:<input type="radio" name="tag` + id + `" value="A"></span></label>
+                  </td>
+                  <td>
+                    ul:<input type="checkbox" id="tagcheck` + id + `" value="ul"><br>
+                    li:<input type="radio" name="tag` + id + `" value="li"><br>
+                    a:<input type="checkbox" id="atagcheck` + id + `" value="a"><br>
+                 
+                  </td>                 
+                </tr>`;
+                    id++;
+                }
+
+                end = blogtext.indexOf("\n", start);
+                if (end == -1) {
+                    i = 0;
+                    id--;
+                }
+            } while (i);
+            selectedrow = document.getElementById("textrow" + (++rowid));
+            selectedrow.style = "border:10px solid green;";
+        }
+
+        window.onkeydown = function tagselectorkeys(ev) {
+            if (!keyslock.checked) {
+                console.log(ev.keyCode);
+                if (rowid <= id && rowid > 0) {
+                    switch (ev.keyCode) {
+                        case 87:
+                            if (rowid > 1) {
+                                prerow = document.getElementById("textrow" + (rowid));
+                                selectedrow = document.getElementById("textrow" + (--rowid));
+                                prerow.style = "border:0px solid green;";
+                                selectedrow.style = "border:10px solid green;";
+                            }
+                            break;
+                        case 83:
+                            if (rowid < id) {
+                                prerow = document.getElementById("textrow" + (rowid));
+                                selectedrow = document.getElementById("textrow" + (++rowid));
+                                prerow.style = "border:0px solid green;";
+                                selectedrow.style = "border:10px solid green;";
+                            }
+                            break;
+                        case 38:
+                            if (rowid > 1) {
+                                prerow = document.getElementById("textrow" + (rowid));
+                                selectedrow = document.getElementById("textrow" + (--rowid));
+                                prerow.style = "border:0px solid green;";
+                                selectedrow.style = "border:10px solid green;";
+                            }
+                            break;
+                        case 40:
+                            if (rowid < id) {
+                                prerow = document.getElementById("textrow" + (rowid));
+                                selectedrow = document.getElementById("textrow" + (++rowid));
+                                prerow.style = "border:0px solid green;";
+                                selectedrow.style = "border:10px solid green;";
+                            }
+                            break;
+                        case 37:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[0].checked = "true";
+                            break;
+                        case 39:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[1].checked = "true";
+                            break;
+                        case 90:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[0].checked = "true";
+                            break;
+                        case 88:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[1].checked = "true";
+                            break;
+                        case 67:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[4].checked = "true";
+                            break;
+                        case 86:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[2].checked = "true";
+                            break;
+                        case 66:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[3].checked = "true";
+                            break;
+                        case 81:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[5].checked = "true";
+                            break;
+                        case 65:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[6].checked = "true";
+                            break;
+                        case 82:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            for (k = 0; k < 8; k++) {
+                                rowtag[k].checked = false;
+                            }
+                            document.getElementById("tagcheck" + rowid).checked = false;
+                            break;
+                        case 76:
+                            rowtag = document.getElementsByName("tag" + rowid);
+                            rowtag[7].checked = "true";
+                            break;
+                        case 79:
+                            document.getElementById("tagcheck" + rowid).checked = true;
+                            break;
+                    }
+                }
+            }
+
+        }
+
+
+        function formatblog() {
+            formatedblog.innerHTML = "";
+            tableofcontent = "";
+            introduction = "";
+            questionanswer = "";
+            questions = "";
+            answers = "";
+            strongtagcount = 0;
+            qflag = 0;
+            aflag = 0;
+            tcid = 0;
+            headingid = 1;
+            h3ulstatus=0;
+            h4ulstatus=0;
+            tagformatcode = formatcode.value;
+
+            for (i = 1; i <= id; i++) {
+                line = document.getElementById("line" + i);
+                line = line.innerText;
+                tag = document.getElementsByName("tag" + i);
+                atag = document.getElementById("atagcheck" + i).checked;
+                tagcode = tagformatcode[i - 1];
+
+
+                if (atag) {
+                    len = bloglinkidarray.length;
+                    for (j = 0; j < len; j++) {
+                        linktext = document.getElementById("bloglink" + bloglinkidarray[j] + "text").value;
+                        match = line.search(linktext);
+                        if (-1 != match) {
+                            link = document.getElementById("bloglink" + bloglinkidarray[j]).value;
+                            link = `<a href="` + link + `" target="_blank" style="color:red" rel="noopener">` + linktext + `</a>`;
+                            line = line.replace(linktext, link);
+                        }
+                    }
+                }
+
+                tagflag = line.search(/[~!$#%^]/);
+                if (tagcode == "n") {
+                    if (line[0] == "~") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        ` <h2>` + line + `</h2>`;
+                    introduction += `<h2 id="">${line}</h2>`;                   
+
+                }
+                if (tagcode == "z" || tag[0].checked || line[0] == "~") {
+                    if (line[0] == "~") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        ` <h2 id="${headingid++}">` + line + `</h2>`;
+                    introduction += `<h2 id="${headingid}">${line}</h2>`;
+
+                    if(1){
+                     
+                        TableofContent.innerHTML +=
+                            ` <a href="#` + headingid + `">
+                    <li align="justify">
+                    ` + line + `
+                    </li>
+                  </a>  `;
+                        tableofcontent += `<a href="#${headingid}">
+                    <li align="justify">
+                    ${line}
+                    </li>
+                  </a>  `;
+                    }
+
+                }
+                if (tagcode == "x" || tag[1].checked || line[0] == "!") {
+                    if (line[0] == "!") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        ` <h3 id="${headingid++}">` + line + `</h3>`;
+                    introduction += `<h3 id="${headingid}">${line}</h3>`;
+                    
+                
+                   
+                }
+                if (tagcode == "b" || tag[2].checked) {
+
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        ` <h4 id="${headingid++}">` + line + `</h4>`;
+                    introduction += `<h4 id="${headingid}">${line}</h4>`;
+
+                    if(0){                     
+                   
+                        TableofContent.innerHTML +=
+                                `<a href="#` + headingid + `">
+                        <li align="justify">
+                        ` + line + `
+                        </li>
+                        </a>  `;
+                            tableofcontent += `<a href="#${headingid}">
+                        <li align="justify">
+                        ${line}
+                        </li>
+                        </a>  `;
+               }
+                }
+                if (tagcode == "c" || tag[3].checked) {
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        ` <p>` + line + `</p>`;
+                    introduction += `<p>${line}</p>`;
+                }
+                if (tagcode == "v" || tag[4].checked || line[0] == "#") {
+                    if (line[0] == "#") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount++;
+                    search = line.search(": ");
+                    
+                    if (search != -1 || line[0] == "*") {
+                        mark = ':';
+                        start = 0;
+                        if (line[0] == "*") {
+                            mark = '*';
+                            start = 1;
+                        }
+                        strongmark = line.indexOf(mark, start);
+                        strongtext = line.slice(start, strongmark + 2);
+                        plaintext = line.slice(strongmark + 2, end);
+                        formatedblog.innerHTML +=
+                            ` <p><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
+                        introduction += `<p><b>` + strongtagcount + `. ${strongtext}</b>${plaintext}</p>`;
+                    } else {
+                        formatedblog.innerHTML +=
+                            ` <p><b>` + strongtagcount + `. </b>${line}</p>`;
+                        introduction += `<p><b>${strongtagcount}. </b>${line}</p>`;
+                    }
+
+                }
+                if (tagcode == "q" || line[0] == "%" || tag[5].checked) {
+                    if (line[0] == "%") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        `  <p>
+                    <strong>Q. ` + line + `</strong>
+                  </p>`;
+                    questionanswer += `<p><strong>Q. ${line}</strong></p>`;
+                    if (qflag) questions += " | " + line;
+                    else {
+                        qflag++;
+                        line = line.replaceAll(`"`, ` `);
+                        questions = line;
+                    }
+
+                }
+                if (tagcode == "a" || line[0] == "^" || tag[6].checked) {
+                    if (line[0] == "^") {
+                        end = line.length;
+                        line = line.slice(1, end);
+                    }
+                    strongtagcount = 0;
+                    formatedblog.innerHTML +=
+                        `<p>
+                  <strong>A. </strong>` + line + `
+               </p>`;
+                    questionanswer += `<p><strong>A. </strong>${line}</p>`;
+                    if (aflag) answers += " | " + line;
+                    else {
+                        aflag++;
+                        line = line.replaceAll(`"`, ` `);
+                        line = line.replaceAll(`”`, ` `);
+                        answers = line;
+                    }
+
+                }
+                if (tagcode == "l" || tag[7].checked) {
+
+                    strongtagcount = 0;
+                    tcid++;
+                    ulcheck = document.getElementById("tagcheck" + i).checked;
+                    if (ulcheck) {
+                        formatedblog.innerHTML +=
+                            `  <ul>
+                    <a href="#` + tcid + `">
+                      <li align="justify">
+                        ` + line + `
+                      </li>
+                    </a>
+                  </ul> `;
+                        tableofcontent += `<ul>
+                    <a href="#${tcid}">
+                      <li align="justify">
+                        ${line}
+                      </li>
+                    </a>
+                  </ul>`;
+                    } else {
+                        formatedblog.innerHTML +=
+                            ` <a href="#` + tcid + `">
+                    <li align="justify">
+                    ` + line + `
+                    </li>
+                  </a>  `;
+                        tableofcontent += `<a href="#${tcid}">
+                    <li align="justify">
+                    ${line}
+                    </li>
+                  </a>  `;
+                    }
+                }
+            }
+            formatedbloghtml = introduction;
+            htmlblog.innerText = formatedbloghtml;
+            //navigator.clipboard.writeText(formatedblog.innerHTML);
+            navigator.clipboard.writeText(formatedbloghtml);
+            questionstext.innerText = questions;
+            questionscopy.innerHTML = datacopy(questions);
+            answerstext.innerText = answers;
+            answerscopy.innerHTML = datacopy(answers);
+        }
+
+        function datacopy(data) {
+            data = data.replaceAll("\n", "");
+            data = data.replaceAll('"', " ");
+            data = data.replaceAll('”', " ");
+            data = "<button onclick=\"navigator.clipboard.writeText(`" + data + "`)\">Copy</button>";
+            return data;
+        }
+
+        bloglinkid = 0;
+        bloglinkidarray = [];
+
+        function bloglinkadd() {
+            if (!bloglinkid) {
+                bloglinkid++;
+                bloglinkbody.innerHTML += `
+            <tr id=bloglinkrow` + bloglinkid + `>
+              <td>
+                <input type="text" name="" id="bloglink` + bloglinkid + `">
+              </td>
+              <td>
+                <input type="text" name="" id="bloglink` + bloglinkid + `text">
+              </td>
+              <td>
+                <button onclick="bloglinkdelete(this.value)" value="` + bloglinkid + `">Delete</button>
+              </td>
+            </tr>`;
+            } else {
+                row = document.createElement("tr");
+                row.setAttribute("id", "bloglinkrow" + (bloglinkid + 1));
+                console.log(bloglinkid);
+                rowadd = document.getElementById("bloglinkrow" + (bloglinkid));
+
+                bloglinkbody.appendChild(row);
+                bloglinkid++;
+                row = document.getElementById("bloglinkrow" + bloglinkid);
+                row.innerHTML = `
+             <td>
+                <input type="text" name="" id="bloglink` + bloglinkid + `">
+              </td>
+              <td>
+                <input type="text" name="" id="bloglink` + bloglinkid + `text">
+              </td>
+              <td>
+                <button onclick="bloglinkdelete(this.value)" value="` + bloglinkid + `">Delete</button>
+              </td>`;
+            }
+            bloglinkidarray.push(bloglinkid);
+        }
+
+        function bloglinkdelete(linkid) {
+            linkid = Number(linkid);
+            bloglinkrow = document.getElementById("bloglinkrow" + linkid);
+            bloglinkrow.remove();
+            index = bloglinkidarray.indexOf(linkid);
+            bloglinkidarray.splice(index, 1);
+        }
+    </script>
+</body>
+
+</html>
